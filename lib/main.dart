@@ -1,4 +1,6 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -55,18 +57,42 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+ final random = Random();
+ String cityName = ""; 
+ String condition = ""; 
+ int Temperature= 0; 
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+late TextEditingController _controller;
+
+void _fetchWeather(){
+  setState(() {
+    int randomTemp = 15 + random.nextInt(30 - 15 + 1);
+    int randomCond = 1 + random.nextInt(3 - 1 + 1);
+    Temperature = randomTemp;
+    cityName = _controller.text ;
+    
+
+    if(randomCond == 1 )
+      condition = "sunny";
+
+    if(randomCond == 2 )
+      condition = "cloundy";
+      
+    if(randomCond == 3 )
+      condition = " rainy";
+
+
+  });
+
+}
+  
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,22 +135,24 @@ class _MyHomePageState extends State<MyHomePage> {
           // ignore: prefer_const_literals_to_create_immutables
           children: <Widget>[
 
-            const TextField(
+             TextField(
+              controller: _controller,
               obscureText: true,        
               decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'City Name',),),
+              labelText: 'City Name',)
+              ),
 
-              const ElevatedButton(onPressed: null, child: Text("Feact weather")),
+               ElevatedButton(onPressed: _fetchWeather , child: Text("Feact weather")),
 
-            const Text(
-              'City Name:',
+            Text(
+              'City Name: $cityName' ,
             ),
-            const Text(
-              'Temperature: ',
+            Text(
+              'Temperature: $Temperature C ',
             ),
-            const Text(
-              'Weather: ',
+             Text(
+              'Weather: $condition ',
             ),
             
           ],
