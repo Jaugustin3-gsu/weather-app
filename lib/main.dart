@@ -57,6 +57,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+List<int> temperatures = [];
+List<String> conditions = [];
  final random = Random();
  String cityName = ""; 
  String condition = ""; 
@@ -64,30 +66,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
 late TextEditingController _controller;
 
-void _fetchWeather(){
-  setState(() {
-    int randomTemp = 15 + random.nextInt(30 - 15 + 1);
-    int randomCond = 1 + random.nextInt(3 - 1 + 1);
-    Temperature = randomTemp;
-    cityName = _controller.text ;
+
+
+ List<int> generateRandomTemperatures(){
+
+     int randomTemp = 15 + random.nextInt(30 - 15 + 1);
+   return List.generate(5, (index) => randomTemp);
+   }
+
+   List<String> generateRandomConditions() { 
     
-
-    if(randomCond == 1 ) {
-      condition = "sunny";
-    }
-
-    if(randomCond == 2 ) {
-      condition = "cloundy";
-    }
-
-    if(randomCond == 3 ) {
-      condition = " rainy";
-    }
-
-
-  });
-
-}
+    List<String> conditions = ['Sunny', 'Cloudy', 'Rainy'];
+    return List.generate(5, (index) => conditions[random.nextInt(conditions.length)]);
+  } 
   
   @override
   void initState() {
@@ -96,9 +87,18 @@ void _fetchWeather(){
   }
 
 
+void updateForecast() {
+    setState(() {
+      temperatures = generateRandomTemperatures();
+      conditions = generateRandomConditions();
+      cityName = _controller.text ;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
-   
+
     return Scaffold(
       appBar: AppBar(
       
@@ -108,36 +108,49 @@ void _fetchWeather(){
       ),
       // ignore: prefer_const_constructors
       body: Center(
-      
-        // ignore: prefer_const_constructors
-        child: Column(
-         
-          mainAxisAlignment: MainAxisAlignment.center,
-          // ignore: prefer_const_literals_to_create_immutables
-          children: <Widget>[
+        
+        
+          // ignore: prefer_const_constructors
+          child: Column(
+            
+            mainAxisAlignment: MainAxisAlignment.center,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: <Widget>[
 
-             TextField(
-              controller: _controller,
-              obscureText: true,        
-              decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'City Name',)
-              ),
+              TextField(
+                controller: _controller,
+                obscureText: true,        
+                decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'City Name',)
+                ),
 
-               ElevatedButton(onPressed: _fetchWeather , child: Text("Feact weather")),
+              const SizedBox(height: 40),
+              
+                // ElevatedButton(onPressed: _fetchWeather , child: Text("Feact weather")),
+                ElevatedButton(onPressed: updateForecast , child: Text("7-day weather forecast")),
 
+                
             Text(
               'City Name: $cityName' ,
             ),
-            Text(
-              'Temperature: $Temperature C ',
-            ),
-             Text(
-              'Weather: $condition ',
-            ),
-            
-          ],
-        ),
+
+                Expanded(child: ListView.builder(
+              itemCount: temperatures.length,
+              itemBuilder: (context, index) {
+                // Set appropriate icon based on the weather condition
+                
+                return ListTile(
+                  title: Text('Day ${index + 1}: ${conditions[index]}'),
+                  trailing: Text('${temperatures[index]}°C'),
+                );
+              },
+            )   ),
+                     
+
+                  
+            ],
+          ),
       ),
      
     );
