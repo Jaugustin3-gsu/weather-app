@@ -86,9 +86,11 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
+      // ignore: prefer_const_constructors
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
+        // ignore: prefer_const_constructors
         child: Column(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
@@ -104,22 +106,31 @@ class _MyHomePageState extends State<MyHomePage> {
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
+          // ignore: prefer_const_literals_to_create_immutables
           children: <Widget>[
+
+            const TextField(
+              obscureText: true,        
+              decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'City Name',),),
+
+              const ElevatedButton(onPressed: null, child: Text("Feact weather")),
+
             const Text(
-              'You have pushed the button this many times:',
+              'City Name:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            const Text(
+              'Temperature: ',
             ),
+            const Text(
+              'Weather: ',
+            ),
+            
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+     
     );
   }
 }
